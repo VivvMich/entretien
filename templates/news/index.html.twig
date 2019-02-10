@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des News{% endblock %}
+
+{% block body %}
+    <h1 class="text-center my-4">News</h1>
+
+    <div class="container my-5">
+
+        {% if app.user %}
+            <a class="btn btn-primary btn-lg btn-block" href="{{ path('news_new') }}" role="button">Ajouter une News</a>
+        {% elseif not app.user %}
+            <a class="btn btn-primary btn-lg btn-block" href="/login" role="button">Ajouter une News</a>
+        {% endif %}
+    
+    </div>
+
+        {% for news in news %}
+                <div class="container">
+                    <div class='card'>
+                        <h3 class=" card-title text-center mt-4"><a href="{{ path('news_comments', {'id': news.id}) }}">{{news.title}}</a></h3>
+                            <div class="card-body">
+                                {{ news.textContent }}
+                            </div>
+                            <div class='mx-4 mb-4'>
+                                <i>Rédigé le {{ news.createAt ? news.createAt|date('d-m-Y') : '' }} à {{ news.createAt ? news.createAt|date('H:i:s') : '' }} par {{news.user.username}}</i>
+                            </div>
+                    </div> 
+                    <p>COMMENTAIRE(S) : {{ news.commentsNumber }}</p>            
+                 </div>
+                
+        {% else %}
+            <h2 class="text-center">Aucun Article</h2>
+        {% endfor %}
+{% endblock %}

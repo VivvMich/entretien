@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification du Commentaire{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="text-center my-3">Modération du Commentaire</h1>
+
+        {{ include('comments/_form.html.twig', {'button_label': 'Mise à Jour'}) }}
+
+        <a href="{{ path('comments_index') }}">Retour à la liste des commentaires</a>
+    </div>
+{% endblock %}

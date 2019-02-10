@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Index des commentaires{% endblock %}
+
+{% block body %}
+    <h1 class="text-center my-4">Modération des commentaires</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Contenu</th>
+                <th>Date de création</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for comment in comments %}
+            <tr>
+                <td>{{ comment.id }}</td>
+                <td>{{ comment.contentComment }}</td>
+                <td>Rédigé le {{ comment.createAt ? comment.createAt|date('d-m-Y') : '' }} à {{ comment.createAt ? comment.createAt|date('H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('comments_edit', {'id': comment.id}) }}"><i class="fas fa-edit"></i></a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
