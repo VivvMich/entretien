@@ -59,18 +59,6 @@ class NewsController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/show", name="news_show", methods={"GET"})
-     */
-    public function show(News $news, CommentsRepository $commentrepository ): Response
-    {
-        $newsId = $news->getId();
-        return $this->render('news/show.html.twig', [
-            'news' => $news,
-            'comments' => $commentrepository->findByNews($newsId),
-            'user' =>  $user = $this->getUser()
-        ]);
-    }
 
     /**
      * @Route("/{id}/edit", name="news_edit", methods={"GET","POST"})
@@ -118,9 +106,9 @@ class NewsController extends AbstractController
             $entityManager->flush();
 
 
-            //return $this->redirectToRoute('news_show', [
-            //   'id' => $news->getId(),
-            //]);
+            return $this->redirectToRoute('news_comments', [
+               'id' => $news->getId(),
+            ]);
         }
 
         return $this->render('news/comment_new.html.twig', [
@@ -153,6 +141,8 @@ class NewsController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$comment->getId(), $request->request->get('_token'))) {
 
+            $news = $comment->getNews();
+
             $event = new GenericEvent($comment);
             $eventDispatcher->dispatch(Events::DELETE_COMMENTS, $event);
 
@@ -160,8 +150,11 @@ class NewsController extends AbstractController
             $entityManager->remove($comment);
             $entityManager->flush();
         }
+ 
+        return $this->redirectToRoute('news_comments', [
+            'id' => $news->getId(),
+         ]);
 
-        return $this->redirectToRoute('news_index');
     }
 
 

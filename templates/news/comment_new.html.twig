@@ -1,21 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Commentaire{% endblock %}
+{% block title %}{{news.title}}{% endblock %}
 
 {% block body %}
-    <h1 class="text-center my-4">Ajouter un commentaire</h1>
+    <h1 class="text-center my-4">{{news.title}}</h1>
 
-                <div class="container">
-                    <div class='card'>
-                        <h3 class=" card-title text-center mt-4"><a href="{{ path('news_show', {'id': news.id}) }}">{{news.title}}</a></h3>
-                            <div class="card-body">
-                                {{ news.textContent }}
-                            </div>
-                            <div class='mx-4 mb-4'>
-                                <i>Rédigé le {{ news.createAt ? news.createAt|date('d-m-Y') : '' }} à {{ news.createAt ? news.createAt|date('H:i:s') : '' }} par {{news.user.username}}</i>
-                            </div>
-                    </div> 
-                    <p>COMMENTAIRE(S) : {{ news.commentsNumber }}</p>
+    <div class="container">
+        <div class='card'>
+            <div class="card-body">
+                {{ news.textContent | raw }}
+            </div>
+        <div class='mx-4 mb-4'>
+            <footer class="blockquote-footer">Rédigé le {{ news.createAt ? news.createAt|date('d-m-Y') : '' }} à {{ news.createAt ? news.createAt|date('H:i:s') : '' }} par <cite title="Source Title">{{news.user.username | capitalize}}</cite></footer>
+        </div>
+    </div> 
+
+    {% if news.commentsNumber == 0 %}
+        <p class='text-center my-4'>AUCUN COMMENTAIRE</p>
+    {% elseif news.commentsNumber == 1 %}
+        <p class='text-center my-4'>COMMENTAIRE : {{ news.commentsNumber }}</p>
+    {% else %}
+        <p class='text-center my-4'>COMMENTAIRES : {{ news.commentsNumber }}</p>
+    {% endif %}
 
     {% for comments in comments %}
 
@@ -23,29 +29,33 @@
             <div class="card my-2">
                 <div class="card-body">
                     <h4  class="text-info">{{comments.user.username |capitalize }}</h4>
-                    <p>{{ comments.contentComment }}</p>
+                    <p>{{ comments.contentComment}}</p>
                     <div class='mx-2 mb-1'>
-                        <p><i>Rédigé le {{ comments.createAt ? comments.createAt|date('d-m-Y') : '' }} à {{ comments.createAt ? comments.createAt|date('H:i:s') : '' }} </i></p>
+                     <footer class="blockquote-footer">Rédigé le {{ comments.createAt ? comments.createAt|date('d-m-Y') : '' }} à {{ comments.createAt ? comments.createAt|date('H:i:s') : '' }}</footer>
                     </div>
                     <div>
                     {% if user != null %}
-
-
                         {% if comments.user.id == user.id %}
-
-                            <a href="{{ path('comments_edit', {'id': comments.id}) }}"><i class="fas fa-edit"></i></a>
-                            
-                            {{ include('comments/_delete_form.html.twig') }}
+                            <a class="text-align-right" href="{{ path('comments_edit', {'id': comments.id}) }}">Modifier</a>
                         {% endif %}
-
                     {% endif %}     
                     </div>
                 </div>
             </div>
+
+        {% if user != null %}
+            {% if comments.user.id == user.id %}
+                {{ include('comments/_delete_form.html.twig') }}
+            {% endif %}
+        {% endif %}    
+
+
         </div>
 
-    {% endfor %}       
-                    {{ include('comments/_form.html.twig') }}             
+    {% endfor %} 
+        <div class="my-3">          
+         {{ include('comments/_form.html.twig') }}
+        </div>           
                  </div>
 
                  

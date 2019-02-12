@@ -20,10 +20,10 @@
                     <div class='card'>
                         <h3 class=" card-title text-center mt-4"><a href="{{ path('news_comments', {'id': news.id}) }}">{{news.title}}</a></h3>
                             <div class="card-body">
-                                {{ news.textContent }}
+                                {{ news.textContent | raw }}
                             </div>
                             <div class='mx-4 mb-4'>
-                                <i>Rédigé le {{ news.createAt ? news.createAt|date('d-m-Y') : '' }} à {{ news.createAt ? news.createAt|date('H:i:s') : '' }} par {{news.user.username}}</i>
+                             <footer class="blockquote-footer">Rédigé le {{ news.createAt ? news.createAt|date('d-m-Y') : '' }} à {{ news.createAt ? news.createAt|date('H:i:s') : '' }} par <cite title="Source Title">{{news.user.username | capitalize}}</cite></footer>
                             </div>
                     </div> 
                     <p>COMMENTAIRE(S) : {{ news.commentsNumber }}</p>            

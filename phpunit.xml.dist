@@ -13,6 +13,9 @@
         <env name="SHELL_VERBOSITY" value="-1" />
     </php>
 
+    <!-- define your env variables for the test env here -->
+    <env name="DATABASE_URL" value="mysql://root:grenade22@127.0.0.1:3306/entretienphp" />
+
     <testsuites>
         <testsuite name="Project Test Suite">
             <directory>tests</directory>
