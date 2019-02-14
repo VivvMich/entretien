@@ -6,6 +6,7 @@ use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class UserType extends AbstractType
 {
@@ -15,7 +16,7 @@ class UserType extends AbstractType
             ->add('username', null, array(
                 'label' => "Nom d'utilisateur"))
 
-            ->add('password', null, array(
+            ->add('password', PasswordType::class, array(
                 'label' => 'Votre mot de passe'))
         ;
     }

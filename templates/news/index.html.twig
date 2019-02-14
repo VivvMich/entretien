@@ -5,7 +5,7 @@
 {% block body %}
     <h1 class="text-center my-4">News</h1>
 
-    <div class="container my-5">
+    <div class="container my-5"> {# Redirection si pas loger #}
 
         {% if app.user %}
             <a class="btn btn-primary btn-lg btn-block" href="{{ path('news_new') }}" role="button">Ajouter une News</a>
@@ -15,10 +15,16 @@
     
     </div>
 
-        {% for news in news %}
+        {% for news in news %} {# Récuperation de toutes les News dans la BD #}
                 <div class="container">
                     <div class='card'>
-                        <h3 class=" card-title text-center mt-4"><a href="{{ path('news_comments', {'id': news.id}) }}">{{news.title}}</a></h3>
+
+                        {% if app.user %}
+                            <h3 class=" card-title text-center mt-4"><a href="{{ path('news_comments', {'id': news.id}) }}">{{news.title}}</a></h3>
+                        {% elseif not app.user %}
+                            <h3 class=" card-title text-center mt-4"><a href="\login">{{news.title}}</a></h3>
+                        {% endif %}
+
                             <div class="card-body">
                                 {{ news.textContent | raw }}
                             </div>

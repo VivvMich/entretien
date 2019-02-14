@@ -45,7 +45,7 @@ class News
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="news")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(nullable=false)
      */
     private $user;
 

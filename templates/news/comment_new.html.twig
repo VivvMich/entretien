@@ -3,6 +3,9 @@
 {% block title %}{{news.title}}{% endblock %}
 
 {% block body %}
+
+        {# Article #}
+
     <h1 class="text-center my-4">{{news.title}}</h1>
 
     <div class="container">
@@ -12,8 +15,29 @@
             </div>
         <div class='mx-4 mb-4'>
             <footer class="blockquote-footer">Rédigé le {{ news.createAt ? news.createAt|date('d-m-Y') : '' }} à {{ news.createAt ? news.createAt|date('H:i:s') : '' }} par <cite title="Source Title">{{news.user.username | capitalize}}</cite></footer>
+            
+            {# Article Modification #}
+
+            {% if user != null %}
+                {% if news.user.id == user.id %}
+                    <a class="text-align-right" href="{{ path('comments_edit', {'id': news.id}) }}">Modifier</a>
+                {% endif %}
+            {% endif %} 
+
         </div>
     </div> 
+
+            {# Article Supression #}
+
+        {% if user != null %}
+            {% if news.user.id == user.id %}
+                {{ include('news/_delete_form.html.twig') }}
+            {% endif %}
+        {% endif %}   
+
+
+        {# Commentaire #}
+
 
     {% if news.commentsNumber == 0 %}
         <p class='text-center my-4'>AUCUN COMMENTAIRE</p>
@@ -23,7 +47,7 @@
         <p class='text-center my-4'>COMMENTAIRES : {{ news.commentsNumber }}</p>
     {% endif %}
 
-    {% for comments in comments %}
+    {% for comments in comments %} {# Récuperation de tous les commentaire lié par la news #}
 
         <div class="container">
             <div class="card my-2">
@@ -34,14 +58,21 @@
                      <footer class="blockquote-footer">Rédigé le {{ comments.createAt ? comments.createAt|date('d-m-Y') : '' }} à {{ comments.createAt ? comments.createAt|date('H:i:s') : '' }}</footer>
                     </div>
                     <div>
+
+                    {# Commentaire Modification #}
+
                     {% if user != null %}
                         {% if comments.user.id == user.id %}
                             <a class="text-align-right" href="{{ path('comments_edit', {'id': comments.id}) }}">Modifier</a>
                         {% endif %}
+                    {% else if user = null %}
+                        <a class="text-align-right" href="/login">Modifier</a>
                     {% endif %}     
                     </div>
                 </div>
             </div>
+
+                    {# Commentaire Supression #}
 
         {% if user != null %}
             {% if comments.user.id == user.id %}
